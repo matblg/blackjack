@@ -37,3 +37,20 @@ void Hand::clear()
 {
     cards.clear();
 }
+
+const std::vector<Card> &Hand::getCards() const
+{
+    return cards;
+}
+
+std::string Hand::toString() const
+{
+    std::string result;
+    for (const auto &c : cards)
+    {
+        if (!result.empty())
+            result += " ";
+        result += c.toString();
+    }
+    return result;
+}

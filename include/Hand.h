@@ -13,4 +13,6 @@ public:
     bool isBust() const;
     bool isBlackjack() const;
     void clear();
+    const std::vector<Card> &getCards() const;
+    std::string toString() const;
 };
