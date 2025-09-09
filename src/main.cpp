@@ -61,9 +61,21 @@ int main()
         bool playerTurn = true;
         while (playerTurn && player.getHand().getValue() < 21)
         {
-            std::cout << "Hit or stand? (h/s): ";
             char choice;
-            std::cin >> choice;
+            while (true)
+            {
+                std::cout << "Hit or stand? (h/s): ";
+                if (!(std::cin >> choice))
+                {
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    continue;
+                }
+                if (choice == 'h' || choice == 's')
+                    break;
+                std::cout << "Invalid choice! Please enter 'h' or 's'.\n";
+            }
+
             if (choice == 'h')
             {
                 player.hit(deck.draw());
@@ -111,7 +123,21 @@ int main()
 
         std::cout << "Your balance: " << player.getBalance() << "\nPlay again? (y/n): ";
         char again;
-        std::cin >> again;
+
+        while (true)
+        {
+            std::cout << "Play again? (y/n): ";
+            if (!(std::cin >> again))
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                continue;
+            }
+            if (again == 'y' || again == 'n')
+                break;
+            std::cout << "Invalid choice! Please enter 'y' or 'n'.\n";
+        }
+
         playing = (again == 'y');
     }
 
