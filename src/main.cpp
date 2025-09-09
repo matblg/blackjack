@@ -16,9 +16,35 @@ int main()
         dealer.clearHand();
 
         std::cout << "\n=== New Round ===\n";
-        int bet;
+
+        // place bet
         std::cout << "Your balance: " << player.getBalance() << "\nEnter bet: ";
-        std::cin >> bet;
+        int bet = 0;
+        while (true)
+        {
+            std::cout << "Enter bet: ";
+            if (!(std::cin >> bet))
+            {
+                // input failed (non-number)
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Invalid input! Please enter a number.\n";
+                continue;
+            }
+            if (bet <= 0)
+            {
+                std::cout << "Bet must be greater than 0.\n";
+            }
+            else if (bet > player.getBalance())
+            {
+                std::cout << "You don't have enough balance.\n";
+            }
+            else
+            {
+                break;
+            }
+        }
+
         player.placeBet(bet);
 
         // initial deal
