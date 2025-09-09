@@ -71,6 +71,7 @@ int main()
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     continue;
                 }
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 if (choice == 'h' || choice == 's')
                     break;
                 std::cout << "Invalid choice! Please enter 'h' or 's'.\n";
@@ -160,6 +161,8 @@ int main()
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 continue;
             }
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
             if (again == 'y' || again == 'n')
                 break;
             std::cout << "Invalid choice! Please enter 'y' or 'n'.\n";
