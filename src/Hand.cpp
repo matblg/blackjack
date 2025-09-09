@@ -43,6 +43,16 @@ const std::vector<Card> &Hand::getCards() const
     return cards;
 }
 
+bool Hand::hasAce() const
+{
+    for (const auto &c : cards)
+    {
+        if (c.rank == "A")
+            return true;
+    }
+    return false;
+}
+
 std::string Hand::toString() const
 {
     std::string result;

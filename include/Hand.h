@@ -13,6 +13,7 @@ public:
     bool isBust() const;
     bool isBlackjack() const;
     void clear();
+    bool hasAce() const;
     const std::vector<Card> &getCards() const;
     std::string toString() const;
     std::string toStringHidden() const;

@@ -5,6 +5,5 @@ class Dealer : public Player
 {
 public:
     Dealer();
-
-    bool shouldHit() const; // Dealer hits until 17
+    bool shouldHit() const;
 };
