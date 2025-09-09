@@ -18,7 +18,7 @@ int main()
         std::cout << "\n=== New Round ===\n";
 
         // place bet
-        std::cout << "Your balance: " << player.getBalance() << "\nEnter bet: ";
+        std::cout << "Your balance: " << player.getBalance() << "\n";
         int bet = 0;
         while (true)
         {
@@ -121,7 +121,7 @@ int main()
             std::cout << "Dealer wins.\n";
         }
 
-        std::cout << "Your balance: " << player.getBalance() << "\nPlay again? (y/n): ";
+        std::cout << "Your balance: " << player.getBalance() << "\n";
         char again;
 
         while (true)
