@@ -54,3 +54,17 @@ std::string Hand::toString() const
     }
     return result;
 }
+
+std::string Hand::toStringHidden() const
+{
+    // only show first card
+    if (cards.empty())
+        return "";
+
+    std::string result = cards[0].toString();
+    for (size_t i = 1; i < cards.size(); i++)
+    {
+        result += " [Hidden]";
+    }
+    return result;
+}

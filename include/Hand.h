@@ -15,4 +15,5 @@ public:
     void clear();
     const std::vector<Card> &getCards() const;
     std::string toString() const;
+    std::string toStringHidden() const;
 };

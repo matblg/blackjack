@@ -27,7 +27,7 @@ int main()
         player.hit(deck.draw());
         dealer.hit(deck.draw());
 
-        std::cout << "Dealer shows: " << dealer.getHand().getCards()[0].toString() << "\n";
+        std::cout << "Dealer shows: " << dealer.getHand().toStringHidden() << "\n";
         std::cout << "Your hand: " << player.getHand().toString()
                   << " (" << player.getHand().getValue() << ")\n";
 
