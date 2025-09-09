@@ -101,24 +101,51 @@ int main()
         // Results
         int playerVal = player.getHand().getValue();
         int dealerVal = dealer.getHand().getValue();
+        bool playerBJ = player.getHand().isBlackjack();
+        bool dealerBJ = dealer.getHand().isBlackjack();
 
-        if (playerVal > 21)
+        std::cout << "Dealer hand revealed: " << dealer.getHand().toString()
+                  << " (" << dealerVal << ")\n";
+
+        // Natural blackjack check
+        if (playerBJ || dealerBJ)
         {
-            std::cout << "You bust! Dealer wins.\n";
-        }
-        else if (dealerVal > 21 || playerVal > dealerVal)
-        {
-            std::cout << "You win!\n";
-            player.adjustBalance(player.getBet() * 2);
-        }
-        else if (playerVal == dealerVal)
-        {
-            std::cout << "Push! Bet returned.\n";
-            player.adjustBalance(player.getBet());
+            if (playerBJ && dealerBJ)
+            {
+                std::cout << "Both you and dealer have Blackjack! Push.\n";
+                player.adjustBalance(player.getBet()); // return bet
+            }
+            else if (playerBJ)
+            {
+                std::cout << "Blackjack! You win 3:2!\n";
+                player.adjustBalance(static_cast<int>(player.getBet() * 2.5)); // 1.5× profit + original bet
+            }
+            else // dealer has blackjack
+            {
+                std::cout << "Dealer has Blackjack! You lose.\n";
+            }
         }
         else
         {
-            std::cout << "Dealer wins.\n";
+            // Normal outcome
+            if (playerVal > 21)
+            {
+                std::cout << "You bust! Dealer wins.\n";
+            }
+            else if (dealerVal > 21 || playerVal > dealerVal)
+            {
+                std::cout << "You win!\n";
+                player.adjustBalance(player.getBet() * 2);
+            }
+            else if (playerVal == dealerVal)
+            {
+                std::cout << "Push! Bet returned.\n";
+                player.adjustBalance(player.getBet());
+            }
+            else
+            {
+                std::cout << "Dealer wins.\n";
+            }
         }
 
         std::cout << "Your balance: " << player.getBalance() << "\n";
