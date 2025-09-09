@@ -4,6 +4,7 @@ A simple single-player Blackjack game in C++.
 
 Designed with the goal to train standard strategy and card counting.
 
+Might run some Monte Carlo on it in the future.
 ## Rules
 
 - The goal is to have a hand value closer to 21 than the dealer without going over.
