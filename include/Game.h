@@ -5,7 +5,7 @@
 
 // Input functions
 int getBet(const Player &player);
-char getHitStandChoice();
+char getPlayerChoice();
 char getPlayAgainChoice();
 
 // Game flow functions

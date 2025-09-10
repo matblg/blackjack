@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <iostream>
 
 Player::Player(std::string name, int startingBalance)
     : name(name), balance(startingBalance), currentBet(0) {}
@@ -18,6 +19,19 @@ void Player::clearHand()
 {
     hand.clear();
     currentBet = 0;
+}
+
+void Player::doubleDown()
+{
+    if (balance >= currentBet)
+    {
+        balance -= currentBet;
+        currentBet *= 2;
+    }
+    else
+    {
+        std::cout << "Not enough balance to double down!\n";
+    }
 }
 
 Hand &Player::getHand() { return hand; }

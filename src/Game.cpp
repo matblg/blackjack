@@ -27,12 +27,16 @@ int getBet(const Player &player)
     return bet;
 }
 
-char getHitStandChoice()
+char getPlayerChoice(bool allowDouble)
 {
     char choice;
     while (true)
     {
-        std::cout << "Hit or stand? (h/s): ";
+        if (allowDouble)
+            std::cout << "Hit, stand, or double down? (h/s/d): ";
+        else
+            std::cout << "Hit or stand? (h/s): ";
+
         if (!(std::cin >> choice))
         {
             std::cin.clear();
@@ -40,9 +44,10 @@ char getHitStandChoice()
             continue;
         }
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        if (choice == 'h' || choice == 's')
+
+        if (choice == 'h' || choice == 's' || (allowDouble && choice == 'd'))
             break;
-        std::cout << "Invalid choice! Please enter 'h' or 's'.\n";
+        std::cout << "Invalid choice!\n";
     }
     return choice;
 }
@@ -78,20 +83,34 @@ void dealInitialCards(Deck &deck, Player &player, Dealer &dealer)
 
 void playerTurn(Deck &deck, Player &player)
 {
+    bool firstDecision = true;
     bool playerTurn = true;
+
     while (playerTurn && player.getHand().getValue() < 21)
     {
-        char choice = getHitStandChoice();
+        char choice = getPlayerChoice(firstDecision);
+
         if (choice == 'h')
         {
             player.hit(deck.draw());
             std::cout << "Your hand: " << player.getHand().toString()
                       << " (" << player.getHand().getValue() << ")\n";
         }
+        else if (choice == 'd' && firstDecision)
+        {
+            player.doubleDown();
+            player.hit(deck.draw());
+            std::cout << "You doubled down!\n";
+            std::cout << "Your hand: " << player.getHand().toString()
+                      << " (" << player.getHand().getValue() << ")\n";
+            playerTurn = false; // must stand
+        }
         else
         {
-            playerTurn = false;
+            playerTurn = false; // stand
         }
+
+        firstDecision = false;
     }
 }
 
