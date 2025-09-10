@@ -22,5 +22,5 @@ public:
     int getBalance() const;
     int getBet() const;
     void adjustBalance(int amount);
-    void doubleDown()
+    void doubleDown();
 };
