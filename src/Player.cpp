@@ -2,8 +2,11 @@
 #include <iostream>
 
 Player::Player(std::string name, int startingBalance)
-    : name(name), balance(startingBalance), activeHand(0) {}
-
+    : name(name), balance(startingBalance), activeHand(0)
+{
+    hands.push_back(Hand());
+    bets.push_back(0);
+}
 void Player::placeBet(int amount)
 {
     if (amount > balance)
@@ -12,9 +15,7 @@ void Player::placeBet(int amount)
         return;
     }
     balance -= amount;
-    hands.push_back(Hand());
-    bets.push_back(amount);
-    activeHand = hands.size() - 1;
+    bets[activeHand] = amount;
 }
 
 void Player::hit(Card c)
