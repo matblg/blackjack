@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -std=c++17 -Iinclude
+CXXFLAGS = -Wall -std=c++17 -Iinclude -g
 
 SRC = $(wildcard src/*.cpp)
 OBJDIR = build
