@@ -27,6 +27,8 @@ void Player::clearHand()
 {
     hands.clear();
     bets.clear();
+    hands.push_back(Hand());
+    bets.push_back(0);
     activeHand = 0;
 }
 
