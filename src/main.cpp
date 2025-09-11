@@ -19,9 +19,8 @@ int main()
 
         dealInitialCards(deck, player, dealer);
 
-        std::cout << "Dealer shows: " << dealer.getHand().toStringHidden() << "\n";
-        std::cout << "Your hand: " << player.getHand().toString()
-                  << " (" << player.getHand().getValue() << ")\n";
+        dealer.showHand(true);
+        player.showHands();
 
         playerTurn(deck, player);
         dealerTurn(deck, dealer);

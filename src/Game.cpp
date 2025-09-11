@@ -165,8 +165,7 @@ void resolveRound(Player &player, Dealer &dealer)
     int dealerVal = dealer.getHand().getValue();
     bool dealerBJ = dealer.getHand().isBlackjack();
 
-    std::cout << "\nDealer hand revealed: " << dealer.getHand().toString()
-              << " (" << dealerVal << ")\n";
+    dealer.showHand(false);
 
     for (int i = 0; i < player.getHandCount(); ++i)
     {

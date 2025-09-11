@@ -81,3 +81,13 @@ int Player::getBalance() const { return balance; }
 int Player::getBet() const { return bets[activeHand]; }
 int Player::getBet(int index) const { return bets[index]; }
 void Player::adjustBalance(int amount) { balance += amount; }
+
+void Player::showHands() const
+{
+    for (size_t i = 0; i < hands.size(); i++)
+    {
+        const auto &hand = hands[i];
+        std::cout << name << " - Hand " << (i + 1) << ": "
+                  << hand.toString() << " (" << hand.getValue() << ")\n";
+    }
+}

@@ -27,6 +27,7 @@ public:
     // Accessors
     Hand &getHand();               // current hand
     Hand &getHand(int index);      // specific hand
+    void showHands() const;        // all hands
     int getHandCount() const;      // number of hands
     void setActiveHand(int index); // change current hand
     std::string getName() const;
