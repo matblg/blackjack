@@ -81,14 +81,16 @@ char getPlayAgainChoice()
 void dealInitialCards(Deck &deck, Player &player, Dealer &dealer)
 {
     player.hit(deck.draw());
+    // player.hit(Card{"A", Suit::Hearts, 11});
     dealer.hit(deck.draw());
     player.hit(deck.draw());
+    // player.hit(Card{"A", Suit::Clubs, 11});
     dealer.hit(deck.draw());
 }
 
 void playerTurn(Deck &deck, Player &player)
 {
-    for (int i = 0; i < player.getHandCount(); ++i)
+    for (int i = 0; i < player.getHandCount(); i++)
     {
         player.setActiveHand(i);
         bool firstDecision = true;
@@ -137,6 +139,8 @@ void playerTurn(Deck &deck, Player &player)
                           << player.getHand(player.getHandCount() - 1).toString()
                           << " (" << player.getHand(player.getHandCount() - 1).getValue() << ")\n";
                 turnActive = false;
+                i = -1; // reset playing turn
+                continue;
             }
             else
             {
