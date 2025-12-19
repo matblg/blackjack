@@ -130,10 +130,11 @@ void playerTurn(Deck &deck, Player &player) {
     while (currentHandIdx < player.getHandCount()) {
         player.setActiveHand(currentHandIdx);
         bool handActive = true;
+        Hand currentHand = player.getHand();
 
         std::cout << "\n--- Playing Hand " << (currentHandIdx + 1) << " ---\n";
 
-        if (player.getHand().fromSplitAces) {
+        if (currentHand.fromSplitAces) {
             // RULE: no more action allowed after splitting aces
             Card secondCard = deck.draw();
             currentHand.addCard(secondCard);
