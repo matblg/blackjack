@@ -3,6 +3,10 @@
 #include "Player.h"
 #include "Dealer.h"
 
+// Global Variables
+const int SMALLEST_CHIP = 1; // Represents $0.50
+const int MIN_BET = 10;      // Represents $5.00
+
 // Input
 int getBet(const Player &player);
 char getPlayerChoice();

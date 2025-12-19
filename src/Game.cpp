@@ -3,28 +3,39 @@
 #include <limits>
 
 // ---------------------- Input Functions ----------------------
-int getBet(const Player &player)
-{
-    int bet = 0;
-    while (true)
-    {
-        std::cout << "Your balance: " << player.getBalance() << "\n";
-        std::cout << "Enter bet: ";
-        if (!(std::cin >> bet))
-        {
+
+int getBet(const Player &player) {
+    double inputBet = 0; // use double temporarily to catch decimal entries
+    while (true) {
+        std::cout << "\n--------------------------------";
+        std::cout << "\nYour balance: $" << (player.getBalance() / 2.0);
+        std::cout << "\nMinimum bet: $" << (MIN_BET / 2.0);
+        std::cout << "\nEnter bet (whole dollars): $";
+        
+        if (!(std::cin >> inputBet)) {
+            std::cout << "Invalid input! Please enter a whole number.\n";
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Invalid input! Please enter a number.\n";
             continue;
         }
-        if (bet <= 0)
-            std::cout << "Bet must be greater than 0.\n";
-        else if (bet > player.getBalance())
-            std::cout << "You don't have enough balance.\n";
-        else
-            break;
+
+        // Check if they entered a decimal (e.g., 10.5)
+        if (inputBet != static_cast<int>(inputBet)) {
+            std::cout << "Error: We only accept whole dollar chips!\n";
+            continue;
+        }
+
+        int dollarBet = static_cast<int>(inputBet);
+        int betChipNb = dollarBet * 2; // Convert to $0.50 units
+
+        if (betChipNb < MIN_BET) {
+            std::cout << "Bet is too low! Min bet is $" << (MIN_BET / 2.0) << ".\n";
+        } else if (betChipNb > player.getBalance()) {
+            std::cout << "You don't have enough chips for that bet!\n";
+        } else {
+            return betChipNb; // Return the scaled integer
+        }
     }
-    return bet;
 }
 
 char getPlayerChoice(bool allowDouble, bool allowSplit)
@@ -195,9 +206,11 @@ bool checkInitialBlackjacks(Player &player, Dealer &dealer) {
 
     if (dealerBJ || playerBJ) {
         dealer.showHand(false); 
+        int originalBet = player.getBet(); // e.g., 20 ($10)
+
         if (playerBJ && dealerBJ) {
             std::cout << "Both have Blackjack! Push.\n";
-            player.adjustBalance(player.getBet()); // return bet
+            player.adjustBalance(originalBet); // return bet
         } else if (playerBJ) {
             std::cout << "Blackjack! You win 3:2!\n";
             // 3:2 payout
