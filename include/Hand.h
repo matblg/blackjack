@@ -16,6 +16,7 @@ public:
     void clear();
     bool hasAce() const;
     const std::vector<Card> &getCards() const;
+    bool Hand::isSoft() const;
     std::string toString() const;
     std::string toStringHidden() const;
 };

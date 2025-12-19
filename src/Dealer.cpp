@@ -10,7 +10,7 @@ bool Dealer::shouldHit() const
         return true;
 
     // Hit soft 17
-    if (value == 17 && hands[0].hasAce())
+    if (value == 17 && hands[0].isSoft())
         return true;
 
     return false; // stand otherwise

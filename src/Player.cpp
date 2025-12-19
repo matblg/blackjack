@@ -106,7 +106,7 @@ GameState Player::getGameState(const Card& dealerUpCard) const {
     const Hand& hand = hands[activeHand];
     
     state.playerHandValue = hand.getValue();
-    state.isSoftHand = hand.hasAce() && (state.playerHandValue <= 21); 
+    state.isSoftHand = hand.isSoft(); 
     state.dealerUpCardValue = dealerUpCard.value;
     
     // Logic for split/double eligibility

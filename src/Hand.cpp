@@ -53,8 +53,23 @@ bool Hand::hasAce() const
     return false;
 }
 
-std::string Hand::toString() const
-{
+bool Hand::isSoft() const {
+    int total = 0;
+    int aces = 0;
+    for (const auto &c : cards) {
+        total += c.value;
+        if (c.rank == "A") aces++;
+    }
+    // if we have an ace and can count it as 11 without busting, it's soft
+    while (total > 21 && aces > 0) {
+        total -= 10;
+        aces--;
+    }
+    // soft if at least one ace is still valued at 11
+    return aces > 0 && total <= 21; 
+}
+
+std::string Hand::toString() const {
     std::string result;
     for (const auto &c : cards)
     {
@@ -65,8 +80,7 @@ std::string Hand::toString() const
     return result;
 }
 
-std::string Hand::toStringHidden() const
-{
+std::string Hand::toStringHidden() const {
     // only show first card
     if (cards.empty())
         return "";
