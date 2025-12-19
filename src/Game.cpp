@@ -116,7 +116,7 @@ bool handleAction(Action action, Deck &deck, Player &player) {
             // draw one card for each new hand
             player.getHand(player.getHandCount() - 2).addCard(deck.draw());
             player.getHand(player.getHandCount() - 1).addCard(deck.draw());
-            return false; // force a refresh of the hand loop logic
+            return true; // force a refresh of the hand loop logic
 
         case Action::Stand:
         default:
@@ -129,13 +129,11 @@ void playerTurn(Deck &deck, Player &player) {
     
     while (currentHandIdx < player.getHandCount()) {
         player.setActiveHand(currentHandIdx);
-        bool firstDecision = (player.getHand().getCards().size() == 2);
-        Hand& currentHand = player.getHand();
         bool handActive = true;
 
         std::cout << "\n--- Playing Hand " << (currentHandIdx + 1) << " ---\n";
 
-        if (currentHand.fromSplitAces) {
+        if (player.getHand().fromSplitAces) {
             // RULE: no more action allowed after splitting aces
             Card secondCard = deck.draw();
             currentHand.addCard(secondCard);
@@ -152,6 +150,8 @@ void playerTurn(Deck &deck, Player &player) {
             std::cout << "Hand: " << player.getHand().toString() 
                       << " (" << player.getHand().getValue() << ")\n";
 
+            
+            bool firstDecision = (player.getHand().getCards().size() == 2);
             bool canSplit = firstDecision && 
                             player.getHand().getCards().size() == 2 &&
                             player.getHand().getCards()[0].rank == player.getHand().getCards()[1].rank;
@@ -168,16 +168,6 @@ void playerTurn(Deck &deck, Player &player) {
 
             // handle action
             handActive = handleAction(act, deck, player);
-
-            // if we split, the turn restarts with a new second card
-            if (act == Action::Split) {
-                std::cout << "You split! Re-evaluating Hand " << (currentHandIdx + 1) << "...\n";
-                firstDecision = true;
-                handActive = true;
-                continue; 
-            }
-
-            firstDecision = false;
         }
 
         if (player.getHand().getValue() > 21) {
