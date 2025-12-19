@@ -17,3 +17,11 @@ struct Card
 
     std::string toString() const;
 };
+
+enum class Action {
+    Hit,
+    Stand,
+    DoubleDown,
+    Split,
+    Surrender 
+};

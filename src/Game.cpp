@@ -88,67 +88,79 @@ void dealInitialCards(Deck &deck, Player &player, Dealer &dealer)
     dealer.hit(deck.draw());
 }
 
-void playerTurn(Deck &deck, Player &player)
-{
-    for (int i = 0; i < player.getHandCount(); i++)
-    {
-        player.setActiveHand(i);
-        bool firstDecision = true;
-        bool turnActive = true;
+bool handleAction(Action action, Deck &deck, Player &player) {
+    switch (action) {
+        case Action::Hit:
+            player.hit(deck.draw());
+            // Return true to keep playing if not bust
+            return player.getHand().getValue() < 21;
 
-        std::cout << "\n--- Playing hand " << (i + 1) << " ---\n";
-        std::cout << "Your hand: " << player.getHand().toString()
-                  << " (" << player.getHand().getValue() << ")\n";
+        case Action::DoubleDown:
+            player.doubleDown();
+            player.hit(deck.draw());
+            return false; // Turn ends after one card in a double
 
-        while (turnActive && player.getHand().getValue() < 21)
-        {
-            bool canSplit = firstDecision &&
+        case Action::Split:
+            player.splitHand();
+            // draw one card for each new hand
+            player.getHand(player.getHandCount() - 2).addCard(deck.draw());
+            player.getHand(player.getHandCount() - 1).addCard(deck.draw());
+            return false; // force a refresh of the hand loop logic
+
+        case Action::Stand:
+        default:
+            return false;
+    }
+}
+
+void playerTurn(Deck &deck, Player &player) {
+    int currentHandIdx = 0;
+    
+    while (currentHandIdx < player.getHandCount()) {
+        player.setActiveHand(currentHandIdx);
+        bool firstDecision = (player.getHand().getCards().size() == 2);
+        bool handActive = true;
+
+        std::cout << "\n--- Playing Hand " << (currentHandIdx + 1) << " ---\n";
+
+        // loop for a single hand
+        while (handActive && player.getHand().getValue() < 21) {
+            std::cout << "Hand: " << player.getHand().toString() 
+                      << " (" << player.getHand().getValue() << ")\n";
+
+            bool canSplit = firstDecision && 
                             player.getHand().getCards().size() == 2 &&
-                            player.getHand().getCards()[0].rank ==
-                                player.getHand().getCards()[1].rank;
+                            player.getHand().getCards()[0].rank == player.getHand().getCards()[1].rank;
 
+            
             char choice = getPlayerChoice(firstDecision, canSplit);
+            
+            // use the enum for actions
+            Action act;
+            if (choice == 'h') act = Action::Hit;
+            else if (choice == 'd') act = Action::DoubleDown;
+            else if (choice == 'p') act = Action::Split;
+            else act = Action::Stand;
 
-            if (choice == 'h')
-            {
-                player.hit(deck.draw());
-                std::cout << "Your hand: " << player.getHand().toString()
-                          << " (" << player.getHand().getValue() << ")\n";
-            }
-            else if (choice == 'd' && firstDecision)
-            {
-                player.doubleDown();
-                player.hit(deck.draw());
-                std::cout << "You doubled down!\n";
-                std::cout << "Your hand: " << player.getHand().toString()
-                          << " (" << player.getHand().getValue() << ")\n";
-                turnActive = false; // must stand
-            }
-            else if (choice == 'p' && canSplit)
-            {
-                player.splitHand();
-                std::cout << "You split your hand!\n";
-                std::cout << "Now you have " << player.getHandCount() << " hands.\n";
-                // draw cards for new hands
-                player.getHand(i).addCard(deck.draw());
-                player.getHand(player.getHandCount() - 1).addCard(deck.draw());
-                std::cout << "Hand " << (i + 1) << ": "
-                          << player.getHand(i).toString()
-                          << " (" << player.getHand(i).getValue() << ")\n";
-                std::cout << "Hand " << player.getHandCount() << ": "
-                          << player.getHand(player.getHandCount() - 1).toString()
-                          << " (" << player.getHand(player.getHandCount() - 1).getValue() << ")\n";
-                turnActive = false;
-                i = -1; // reset playing turn
-                continue;
-            }
-            else
-            {
-                turnActive = false; // stand
+            // handle action
+            handActive = handleAction(act, deck, player);
+
+            // if we split, the turn restarts with a new second card
+            if (act == Action::Split) {
+                std::cout << "You split! Re-evaluating Hand " << (currentHandIdx + 1) << "...\n";
+                firstDecision = true;
+                handActive = true;
+                continue; 
             }
 
             firstDecision = false;
         }
+
+        if (player.getHand().getValue() > 21) {
+            std::cout << "Bust! (" << player.getHand().getValue() << ")\n";
+        }
+
+        currentHandIdx++; // move to the next hand
     }
 }
 

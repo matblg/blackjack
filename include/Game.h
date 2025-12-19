@@ -13,3 +13,12 @@ void dealInitialCards(Deck &deck, Player &player, Dealer &dealer);
 void playerTurn(Deck &deck, Player &player);
 void dealerTurn(Deck &deck, Dealer &dealer);
 void resolveRound(Player &player, Dealer &dealer);
+
+// Game state to feed our models
+struct GameState {
+    int playerHandValue;
+    bool isSoftHand;      
+    int dealerUpCardValue;
+    bool canSplit;
+    bool canDouble;
+};

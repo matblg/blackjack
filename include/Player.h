@@ -24,7 +24,7 @@ public:
     virtual void hit(Card c);
     virtual void clearHand();
 
-    // Accessors
+    // Getters/setters
     Hand &getHand();               // current hand
     Hand &getHand(int index);      // specific hand
     void showHands() const;        // all hands
@@ -35,4 +35,5 @@ public:
     int getBet() const;          // current bet
     int getBet(int index) const; // bet for specific hand
     void adjustBalance(int amount);
+    GameState getGameState(const Card &dealerUpCard) const;
 };

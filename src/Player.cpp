@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Game.h"
 #include <iostream>
 
 Player::Player(std::string name, int startingBalance)
@@ -93,4 +94,21 @@ void Player::showHands() const
         std::cout << name << " - Hand " << (i + 1) << ": "
                   << hand.toString() << " (" << hand.getValue() << ")\n";
     }
+}
+
+GameState Player::getGameState(const Card& dealerUpCard) const {
+    GameState state;
+    const Hand& hand = hands[activeHand];
+    
+    state.playerHandValue = hand.getValue();
+    state.isSoftHand = hand.hasAce() && (state.playerHandValue <= 21); 
+    state.dealerUpCardValue = dealerUpCard.value;
+    
+    // Logic for split/double eligibility
+    state.canSplit = (hand.getCards().size() == 2 && 
+                      hand.getCards()[0].rank == hand.getCards()[1].rank &&
+                      balance >= bets[activeHand]);
+    state.canDouble = (hand.getCards().size() == 2 && balance >= bets[activeHand]);
+    
+    return state;
 }
