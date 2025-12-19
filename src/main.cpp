@@ -22,9 +22,6 @@ int main()
         dealer.showHand(true);
         player.showHands();
 
-        playerTurn(deck, player);
-        dealerTurn(deck, dealer);
-
         if (!checkInitialBlackjacks(player, dealer)) {
             playerTurn(deck, player);
             dealerTurn(deck, dealer);

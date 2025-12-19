@@ -101,22 +101,28 @@ void dealInitialCards(Deck &deck, Player &player, Dealer &dealer)
 
 bool handleAction(Action action, Deck &deck, Player &player) {
     switch (action) {
-        case Action::Hit:
-            player.hit(deck.draw());
-            // Return true to keep playing if not bust
+        case Action::Hit: {
+            Card drawn = deck.draw();
+            player.hit(drawn);
+            std::cout << "You drew: " << drawn.toString() << "\n";
             return player.getHand().getValue() < 21;
+        }
 
-        case Action::DoubleDown:
+        case Action::DoubleDown:{
             player.doubleDown();
-            player.hit(deck.draw());
-            return false; // Turn ends after one card in a double
+            Card drawn = deck.draw();
+            player.hit(drawn);
+            std::cout << "Double Down card: " << drawn.toString() << "\n";
+            return false; // turn ends after one card in a double
+        }
 
-        case Action::Split:
+        case Action::Split:{
             player.splitHand();
             // draw one card for each new hand
             player.getHand(player.getHandCount() - 2).addCard(deck.draw());
             player.getHand(player.getHandCount() - 1).addCard(deck.draw());
             return true; // force a refresh of the hand loop logic
+        }
 
         case Action::Stand:
         default:
@@ -129,7 +135,6 @@ void playerTurn(Deck &deck, Player &player) {
     
     while (currentHandIdx < player.getHandCount()) {
         player.setActiveHand(currentHandIdx);
-        bool handActive = true;
         Hand currentHand = player.getHand();
 
         std::cout << "\n--- Playing Hand " << (currentHandIdx + 1) << " ---\n";
@@ -142,10 +147,11 @@ void playerTurn(Deck &deck, Player &player) {
             std::cout << "Split Ace receives: " << secondCard.toString() 
                       << " (Total: " << currentHand.getValue() << ")\n";
             std::cout << "No further actions allowed on split Aces.\n";
-
-            handActive = false; // end of turn for this hand
+            currentHandIdx++;
+            continue;
         }
 
+        bool handActive = true;
         // loop for a single hand
         while (handActive && player.getHand().getValue() < 21) {
             std::cout << "Hand: " << player.getHand().toString() 
@@ -196,7 +202,6 @@ bool checkInitialBlackjacks(Player &player, Dealer &dealer) {
     bool dealerBJ = dealer.getHand().isBlackjack();
 
     if (dealerBJ || playerBJ) {
-        dealer.showHand(false); 
         int originalBet = player.getBet(); // e.g., 20 ($10)
 
         if (playerBJ && dealerBJ) {
@@ -216,7 +221,6 @@ bool checkInitialBlackjacks(Player &player, Dealer &dealer) {
 
 void resolveRound(Player &player, Dealer &dealer) {
     int dealerVal = dealer.getHand().getValue();
-    dealer.showHand(false);
 
     for (int i = 0; i < player.getHandCount(); ++i) {
         player.setActiveHand(i);
