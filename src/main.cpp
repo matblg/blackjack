@@ -25,7 +25,11 @@ int main()
         playerTurn(deck, player);
         dealerTurn(deck, dealer);
 
-        resolveRound(player, dealer);
+        if (!checkInitialBlackjacks(player, dealer)) {
+            playerTurn(deck, player);
+            dealerTurn(deck, dealer);
+            resolveRound(player, dealer);
+        }
 
         std::cout << "Your balance: " << player.getBalance() << "\n";
         char again = getPlayAgainChoice();

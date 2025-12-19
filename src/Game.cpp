@@ -132,7 +132,7 @@ void playerTurn(Deck &deck, Player &player) {
             std::cout << "Split Ace receives: " << secondCard.toString() 
                       << " (Total: " << currentHand.getValue() << ")\n";
             std::cout << "No further actions allowed on split Aces.\n";
-            
+
             handActive = false; // end of turn for this hand
         }
 
@@ -189,58 +189,51 @@ void dealerTurn(Deck &deck, Dealer &dealer)
     }
 }
 
-void resolveRound(Player &player, Dealer &dealer)
-{
-    int dealerVal = dealer.getHand().getValue();
+bool checkInitialBlackjacks(Player &player, Dealer &dealer) {
+    bool playerBJ = player.getHand().isBlackjack();
     bool dealerBJ = dealer.getHand().isBlackjack();
 
+    if (dealerBJ || playerBJ) {
+        dealer.showHand(false); 
+        if (playerBJ && dealerBJ) {
+            std::cout << "Both have Blackjack! Push.\n";
+            player.adjustBalance(player.getBet()); // return bet
+        } else if (playerBJ) {
+            std::cout << "Blackjack! You win 3:2!\n";
+            // 3:2 payout
+            player.adjustBalance(static_cast<int>(player.getBet() * 2.5));
+        } else {
+            std::cout << "Dealer has Blackjack! You lose.\n";
+        }
+        return true; 
+    }
+    return false; 
+}
+
+void resolveRound(Player &player, Dealer &dealer) {
+    int dealerVal = dealer.getHand().getValue();
     dealer.showHand(false);
 
-    for (int i = 0; i < player.getHandCount(); ++i)
-    {
+    for (int i = 0; i < player.getHandCount(); ++i) {
         player.setActiveHand(i);
         int playerVal = player.getHand().getValue();
-        bool playerBJ = player.getHand().isBlackjack();
+        int currentBet = player.getBet(i);
 
-        std::cout << "\nResult for Hand " << (i + 1) << ": "
-                  << player.getHand().toString()
-                  << " (" << playerVal << ")\n";
+        std::cout << "\nResult for Hand " << (i + 1) << ": ";
 
-        // Natural blackjack check
-        if (playerBJ || dealerBJ)
-        {
-            if (playerBJ && dealerBJ)
-            {
-                std::cout << "Both you and dealer have Blackjack! Push.\n";
-                player.adjustBalance(player.getBet(i));
-            }
-            else if (playerBJ)
-            {
-                std::cout << "Blackjack! You win 3:2!\n";
-                player.adjustBalance(static_cast<int>(player.getBet(i) * 2.5));
-            }
-            else
-            {
-                std::cout << "Dealer has Blackjack! You lose.\n";
-            }
-        }
-        else
-        {
-            // Normal outcome
-            if (playerVal > 21)
-                std::cout << "You bust! Dealer wins.\n";
-            else if (dealerVal > 21 || playerVal > dealerVal)
-            {
-                std::cout << "You win!\n";
-                player.adjustBalance(player.getBet(i) * 2);
-            }
-            else if (playerVal == dealerVal)
-            {
-                std::cout << "Push! Bet returned.\n";
-                player.adjustBalance(player.getBet(i));
-            }
-            else
-                std::cout << "Dealer wins.\n";
+        if (playerVal > 21) {
+            std::cout << "You bust! Dealer wins.\n";
+        } else if (dealerVal > 21) {
+            std::cout << "Dealer busts! You win!\n";
+            player.adjustBalance(currentBet * 2);
+        } else if (playerVal > dealerVal) {
+            std::cout << "You win!\n";
+            player.adjustBalance(currentBet * 2);
+        } else if (playerVal == dealerVal) {
+            std::cout << "Push! Bet returned.\n";
+            player.adjustBalance(currentBet);
+        } else {
+            std::cout << "Dealer wins.\n";
         }
     }
 }
