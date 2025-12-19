@@ -1,7 +1,10 @@
-#pragma once
+#ifndef GAME_H
+#define GAME_H
+
 #include "Deck.h"
 #include "Player.h"
 #include "Dealer.h"
+#include "Types.h"
 
 // Global Variables
 const int SMALLEST_CHIP = 1; // Represents $0.50
@@ -19,11 +22,4 @@ void dealerTurn(Deck &deck, Dealer &dealer);
 void resolveRound(Player &player, Dealer &dealer);
 bool checkInitialBlackjacks(Player &player, Dealer &dealer);
 
-// Game state to feed our models
-struct GameState {
-    int playerHandValue;
-    bool isSoftHand;      
-    int dealerUpCardValue;
-    bool canSplit;
-    bool canDouble;
-};
+#endif

@@ -1,5 +1,8 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include "Hand.h"
+#include "Types.h"
 #include <string>
 #include <vector>
 
@@ -37,3 +40,4 @@ public:
     void adjustBalance(int amount);
     GameState getGameState(const Card &dealerUpCard) const;
 };
+#endif
