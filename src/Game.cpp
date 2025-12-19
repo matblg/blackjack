@@ -119,9 +119,22 @@ void playerTurn(Deck &deck, Player &player) {
     while (currentHandIdx < player.getHandCount()) {
         player.setActiveHand(currentHandIdx);
         bool firstDecision = (player.getHand().getCards().size() == 2);
+        Hand& currentHand = player.getHand();
         bool handActive = true;
 
         std::cout << "\n--- Playing Hand " << (currentHandIdx + 1) << " ---\n";
+
+        if (currentHand.fromSplitAces) {
+            // RULE: no more action allowed after splitting aces
+            Card secondCard = deck.draw();
+            currentHand.addCard(secondCard);
+
+            std::cout << "Split Ace receives: " << secondCard.toString() 
+                      << " (Total: " << currentHand.getValue() << ")\n";
+            std::cout << "No further actions allowed on split Aces.\n";
+            
+            handActive = false; // end of turn for this hand
+        }
 
         // loop for a single hand
         while (handActive && player.getHand().getValue() < 21) {

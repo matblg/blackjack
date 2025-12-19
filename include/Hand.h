@@ -7,6 +7,7 @@ class Hand
 public:
     std::vector<Card> cards;
     bool isSplit = false;
+    bool fromSplitAces = false;
 
     void addCard(const Card &card);
     int getValue() const;

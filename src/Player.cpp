@@ -52,13 +52,14 @@ void Player::splitHand()
     if (hand.getCards().size() == 2 &&
         hand.getCards()[0].rank == hand.getCards()[1].rank)
     {
+        bool splittingAces = (hand.getCards()[0].rank == "A");
         if (balance < bets[activeHand])
         {
             std::cout << "Not enough balance to split!\n";
             return;
         }
 
-        // bet for new hadn
+        // bet for new hand
         balance -= bets[activeHand];
 
         // create two new hands
@@ -69,6 +70,10 @@ void Player::splitHand()
 
         hands.push_back(newHand);
         bets.push_back(bets[activeHand]);
+
+        // hands are from splitting Aces
+        hands[activeHand].fromSplitAces = splittingAces;
+        hands.back().fromSplitAces = splittingAces;
     }
     else
     {
