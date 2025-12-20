@@ -14,7 +14,7 @@ int main()
             std::cout << "\n[Dealer reshuffles the deck]\n";
             deck.shuffle();
         }
-        
+
         player.clearHand();
         dealer.clearHand();
 
@@ -33,7 +33,7 @@ int main()
             resolveRound(player, dealer);
         }
 
-        std::cout << "Your balance: " << player.getBalance() << "\n";
+        std::cout << "Your balance: $" << player.getBalance()/2 << "\n";
         char again = getPlayAgainChoice();
         playing = (again == 'y');
     }

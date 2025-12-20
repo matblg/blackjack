@@ -118,10 +118,15 @@ bool handleAction(Action action, Deck &deck, Player &player) {
 
         case Action::Split:{
             player.splitHand();
-            // draw one card for each new hand
-            player.getHand(player.getHandCount() - 2).addCard(deck.draw());
-            player.getHand(player.getHandCount() - 1).addCard(deck.draw());
-            return true; // force a refresh of the hand loop logic
+            Card drawn = deck.draw();
+            player.getHand().addCard(drawn);
+            std::cout << "Current hand receives: " << drawn.toString() << "\n";
+            std::cout << "Hand: " << player.getHand().toString() 
+                      << " (" << player.getHand().getValue() << ")\n";
+            if (player.getHand().fromSplitAces) {
+                return false;
+            }
+            return true;
         }
 
         case Action::Stand:
@@ -135,18 +140,21 @@ void playerTurn(Deck &deck, Player &player) {
     
     while (currentHandIdx < player.getHandCount()) {
         player.setActiveHand(currentHandIdx);
-        Hand currentHand = player.getHand();
+        Hand &currentHand = player.getHand();
 
         std::cout << "\n--- Playing Hand " << (currentHandIdx + 1) << " ---\n";
 
         if (currentHand.fromSplitAces) {
             // RULE: no more action allowed after splitting aces
-            Card secondCard = deck.draw();
-            currentHand.addCard(secondCard);
+            if (player.getHand().getCards().size() == 1) {
+                Card secondCard = deck.draw();
+                player.getHand().addCard(secondCard);
 
-            std::cout << "Split Ace receives: " << secondCard.toString() 
-                      << " (Total: " << currentHand.getValue() << ")\n";
-            std::cout << "No further actions allowed on split Aces.\n";
+                std::cout << "Split Ace receives: " << secondCard.toString() << "\n";
+                std::cout << "Hand: " << currentHand.toString() 
+                          << " (Total: " << player.getHand().getValue() << ")\n";
+                std::cout << "No further actions allowed on split Aces.\n";
+            }
             currentHandIdx++;
             continue;
         }

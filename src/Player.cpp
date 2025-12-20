@@ -63,10 +63,16 @@ void Player::splitHand()
         balance -= bets[activeHand];
 
         // create two new hands
-        Hand newHand;
-        newHand.addCard(hand.getCards()[1]);
+        Card card1 = hand.getCards()[0];
+        Card card2 = hand.getCards()[1];
+
         hand = Hand();
-        hand.addCard(newHand.getCards()[0]);
+        hand.addCard(card1);
+        hand.fromSplitAces = splittingAces;
+
+        Hand newHand;
+        newHand.addCard(card2);
+        newHand.fromSplitAces = splittingAces;        
 
         hands.push_back(newHand);
         bets.push_back(bets[activeHand]);
