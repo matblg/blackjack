@@ -10,6 +10,11 @@ int main()
     bool playing = true;
     while (playing && player.getBalance() > 0)
     {
+        if (deck.needsReshuffle()) {
+            std::cout << "\n[Dealer reshuffles the deck]\n";
+            deck.shuffle();
+        }
+        
         player.clearHand();
         dealer.clearHand();
 
