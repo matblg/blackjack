@@ -2,7 +2,8 @@
 #include <algorithm>
 #include <ctime>
 
-Deck::Deck(int numDecks, int penetration) : penetrationCount(0), rng(std::mt19937(std::time(0))), totalInitialCards(numDecks *52)
+Deck::Deck(int numDecks) 
+:  rng(std::mt19937(std::time(0))), totalInitialCards(numDecks *52)
 {
     std::vector<std::string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
     std::vector<int> values = {2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11};
@@ -37,6 +38,6 @@ Card Deck::draw()
 
 bool Deck::needsReshuffle() const
 {
-    // Default penetration count is 75%
+    // default penetration count is 75%
     return penetrationCount > (totalInitialCards * 0.75); 
 }

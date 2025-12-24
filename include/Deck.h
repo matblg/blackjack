@@ -12,7 +12,7 @@ private:
     int totalInitialCards;
 
 public:
-    Deck(int numDecks = 1, int penetration = 75);
+    Deck(int numDecks = 1);
     void shuffle();
     Card draw();
     bool needsReshuffle() const;
