@@ -1,5 +1,6 @@
 #include "Player.h"
 
+
 Player::Player(std::string name, int startingBalance)
     : name(name), balance(startingBalance), activeHand(0)
 {
@@ -14,6 +15,7 @@ bool Player::placeBet(int amount)
     }
     balance -= amount;
     bets[activeHand] = amount;
+    return true;
 }
 
 void Player::hit(Card c)

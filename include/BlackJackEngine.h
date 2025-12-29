@@ -5,10 +5,10 @@
 #include "Dealer.h"
 
 enum class EngineAction {
-    Hit,
-    Stand,
-    Double,
-    Split
+    Hit = 0,
+    Stand = 1,
+    Double = 2,
+    Split = 3
 };
 
 struct StepResult {
@@ -29,8 +29,14 @@ class BlackjackEngine {
         Dealer dealer;
         int currentHandIdx;
         bool roundOver;
+        int currentBetAmount;
+
         void playDealer();
-        float calculateSettlement();
+        void resolveRound(float& reward, bool& win);
+        void dealInitialCards();
+        // returns current state [PlayerSum, DealerUpCard, UsableAce]
+        std::vector<float> getCurrentState();
+
     
     public:
         BlackjackEngine();
@@ -41,9 +47,6 @@ class BlackjackEngine {
 
         // advance the round by one action
         StepResult step(EngineAction action);
-
-        // returns current state [PlayerSum, DealerUpCard, UsableAce]
-        std::vector<float> getState() const;
 
         //setter-getter
         const Player& getPlayer() const { return player; }
