@@ -15,7 +15,7 @@ bool Dealer::shouldHit() const
     return false; // stand otherwise
 }
 
-std::string Dealer::getHand(bool hideFirstCard) const
+std::string Dealer::getHandString(bool hideFirstCard) const
 {
     if (hideFirstCard && !hands[0].getCards().empty())
     {
