@@ -1,5 +1,4 @@
 #include "Dealer.h"
-#include <iostream>
 
 Dealer::Dealer() : Player("Dealer", 0) {}
 
@@ -16,15 +15,14 @@ bool Dealer::shouldHit() const
     return false; // stand otherwise
 }
 
-void Dealer::showHand(bool hideFirstCard) const
+std::string Dealer::getHand(bool hideFirstCard) const
 {
     if (hideFirstCard && !hands[0].getCards().empty())
     {
-        std::cout << "Dealer shows: " << hands[0].getCards()[0].toString() << " [Hidden]\n";
+        return hands[0].getCards()[0].toString() + " [Hidden]";
     }
     else
     {
-        std::cout << "Dealer hand: " << hands[0].toString()
-                  << " (" << hands[0].getValue() << ")\n";
+        return hands[0].toString();
     }
 }

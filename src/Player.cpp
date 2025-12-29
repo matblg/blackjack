@@ -1,6 +1,4 @@
 #include "Player.h"
-#include "Game.h"
-#include <iostream>
 
 Player::Player(std::string name, int startingBalance)
     : name(name), balance(startingBalance), activeHand(0)
@@ -8,12 +6,11 @@ Player::Player(std::string name, int startingBalance)
     hands.push_back(Hand());
     bets.push_back(0);
 }
-void Player::placeBet(int amount)
+bool Player::placeBet(int amount)
 {
     if (amount > balance)
     {
-        std::cout << "Not enough balance!\n";
-        return;
+        return false;
     }
     balance -= amount;
     bets[activeHand] = amount;
@@ -33,20 +30,24 @@ void Player::clearHand()
     activeHand = 0;
 }
 
-void Player::doubleDown()
+bool Player::doubleDown()
 {
+    // can only double down on two initial cards
+    if (hands[activeHand].getCards().size() != 2) return false;
+
     if (balance >= bets[activeHand])
     {
         balance -= bets[activeHand];
         bets[activeHand] *= 2;
+        return true;
     }
     else
     {
-        std::cout << "Not enough balance to double down!\n";
+        return false;
     }
 }
 
-void Player::splitHand()
+bool Player::splitHand()
 {
     Hand &hand = hands[activeHand];
     if (hand.getCards().size() == 2 &&
@@ -55,8 +56,7 @@ void Player::splitHand()
         bool splittingAces = (hand.getCards()[0].rank == "A");
         if (balance < bets[activeHand])
         {
-            std::cout << "Not enough balance to split!\n";
-            return;
+            return false;
         }
 
         // bet for new hand
@@ -83,7 +83,7 @@ void Player::splitHand()
     }
     else
     {
-        std::cout << "Cannot split this hand!\n";
+        return false;
     }
 }
 
@@ -96,16 +96,6 @@ int Player::getBalance() const { return balance; }
 int Player::getBet() const { return bets[activeHand]; }
 int Player::getBet(int index) const { return bets[index]; }
 void Player::adjustBalance(int amount) { balance += amount; }
-
-void Player::showHands() const
-{
-    for (size_t i = 0; i < hands.size(); i++)
-    {
-        const auto &hand = hands[i];
-        std::cout << name << " - Hand " << (i + 1) << ": "
-                  << hand.toString() << " (" << hand.getValue() << ")\n";
-    }
-}
 
 GameState Player::getGameState(const Card& dealerUpCard) const {
     GameState state;

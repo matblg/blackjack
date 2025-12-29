@@ -19,9 +19,9 @@ public:
     Player(std::string name, int startingBalance = 1000);
 
     // Betting
-    virtual void placeBet(int amount);
-    void doubleDown();
-    void splitHand();
+    bool placeBet(int amount);
+    bool doubleDown();
+    bool splitHand();
 
     // Gameplay
     virtual void hit(Card c);
@@ -30,7 +30,6 @@ public:
     // Getters/setters
     Hand &getHand();               // current hand
     Hand &getHand(int index);      // specific hand
-    void showHands() const;        // all hands
     int getHandCount() const;      // number of hands
     void setActiveHand(int index); // change current hand
     std::string getName() const;
